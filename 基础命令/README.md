@@ -217,8 +217,6 @@ mysql> SHOW CREATE TABLE tb_user;
 
 ## DDL操作表-删除&修改&添加
 
-### 添加
-
 - 新增： `ALTER TABLE 表名 add 字段名 类型 comment '描述';`
 - 修改数据类型：`ALTER TABLE 表名 MODIFY 字段名 新类型;`
 - 修改字段名和字段类型：`ALTER TABLE 表名 CHANGE 旧字段名 新字段名 类型(长度) comment '描述' [约束];`
