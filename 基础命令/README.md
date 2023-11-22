@@ -214,3 +214,20 @@ mysql> SHOW CREATE TABLE tb_user;
 |`YEAR`|1|1901/2155|YYYY|年份值|
 |`DATETIME`|8|'1000-01-01 00:00:00' 到 '9999-12-31 23:59:59'|YYYY-MM-DD hh:mm:ss|混合日期和时间值|
 |`TIMESTAMP`|4|'1970-01-01 00:00:01' UTC 到 '2038-01-19 03:14:07' UTC结束时间是第 2147483647 秒，北京时间 2038-1-19 11:14:07，格林尼治时间 2038年1月19日 凌晨 03:14:07|YYYY-MM-DD hh:mm:ss|混合日期和时间值，时间戳|
+
+## DDL操作表-删除&修改&添加
+
+### 添加
+
+- 新增： `ALTER TABLE 表名 add 字段名 类型 comment '描述';`
+- 修改数据类型：`ALTER TABLE 表名 MODIFY 字段名 新类型;`
+- 修改字段名和字段类型：`ALTER TABLE 表名 CHANGE 旧字段名 新字段名 类型(长度) comment '描述' [约束];`
+
+```shell
+# 新增
+mysql> alter table staff add nickname varchar(20) comment '昵称';
+# 修改
+mysql> alter table staff modify age tinyint unsigned;
+# 修改字段名和字段类型：
+mysql> alter table staff change nickname realname char(4) comment '真实名字';
+```
