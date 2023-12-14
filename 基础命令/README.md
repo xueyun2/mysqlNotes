@@ -47,7 +47,7 @@ USE mydatabase; #使用mydatabase数据库
 - `SHOW TABLES`：查询使用的数据库所有表
 - `DESC 表名;` ：查询表结构
 - `SHOW CREATE TABLE 表名;` ：查询指定表的建表语句
-- `CREATE TABLE 表名（字段1 字段1类型[COMMENT 字段注释]）[COMMENT 表注释],`：创建表，**注意：最后一个字段没有逗号**
+- `CREATE TABLE 表名（字段1 字段1类型[COMMENT 字段注释]）[COMMENT 表注释];`：创建表，**注意：最后一个字段没有逗号**
 
 ```shell
 DESC tb_user; #查询表结构
