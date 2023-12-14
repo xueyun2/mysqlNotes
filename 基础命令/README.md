@@ -1,7 +1,5 @@
 # SQL基础命令
 
-> 学习教程地址：<https://www.bilibili.com/video/BV1Kr4y1i7ru/?p=8&spm_id_from=333.788.top_right_bar_window_history.content.click>
-
 ## SQL分类
 
 - `DDL`：数据定义语言，用来定义数据库对象（数据库，表，字段）
@@ -15,82 +13,47 @@
 
 **查询：**
 
-|语法|说明|
-|---|---|
-|`SHOW DATABASES;`|查询所有数据库 |
-|`SELECT DATABASE();`|查询当前数据库|
-
-查看所有数据库：
-
 ```shell
-mysql> SHOW DATABASES; 
-+--------------------+
-| Database           |
-+--------------------+
-| information_schema |
-| mydatabase         |
-| mysql              |
-| performance_schema |
-| sys                |
-+--------------------+
-5 rows in set (0.00 sec)
-```
-
-查看当前数据库：
-
-```shell
-mysql> SELECT DATABASE(); 
-+------------+
-| DATABASE() |
-+------------+
-| mydatabase |
-+------------+
-1 row in set (0.00 sec)
+SHOW DATABASES; #查询所有数据库
+SELECT DATABASE(); #查询当前数据库
 ```
 
 **创建：**
 
-|语法|说明|参数|
-|---|---|---|
-|`CREATE DATABASE`|创建数据库 |`IF NOT EXISTS`：创建不存在的数据库，`DEFAULT CHARSET`：设置字符集一般设置：`utf8mb4`，`COLLATE`：排序规则|
-
-创建名为：`myDataBase`的数据库。
+`CREATE DATABASE`创建数据库 `IF NOT EXISTS`：创建不存在的数据库，`DEFAULT CHARSET`：设置字符集一般设置：`utf8mb4`，`COLLATE`：排序规则
 
 ```shell
-mysql> CREATE DATABASE myDataBase;
-Query OK, 1 row affected (0.01 sec)
+CREATE DATABASE myDataBase; #创建myDataBase数据库
 ```
 
 **删除：**
 
-|语法|说明|参数|
-|---|---|---|
-|`DROP DATABASE`|删除指定数据库|`IF EXISTS`：判断是否存在|
-
-删除名为：`mydatabase`的数据库。
+`DROP DATABASE`删除指定数据库`IF EXISTS`：判断是否存在
 
 ```shell
-mysql>  DROP DATABASE IF EXISTS mydatabase;
-Query OK, 0 rows affected (0.01 sec)
+DROP DATABASE IF EXISTS mydatabase; #myDataBase
 ```
 
 **使用：**
 
 `USE`：数据库名
 
-使用：`mydatabase`数据库。
-
 ```shell
-mysql> USE mydatabase;
-Database changed
+USE mydatabase; #使用mydatabase数据库
 ```
 
-## DDL操作表
+## DDL操作表-查询&创建
 
-- `SHOW TABLES`：查询当前数据库所有表
+- `SHOW TABLES`：查询使用的数据库所有表
 - `DESC 表名;` ：查询表结构
 - `SHOW CREATE TABLE 表名;` ：查询指定表的建表语句
 - `CREATE TABLE 表名（字段1 字段1类型[COMMENT 字段注释]）[COMMENT 表注释],`：创建表，**注意：最后一个字段没有逗号**
+
+```shell
+DESC tb_user; #查询表结构
+SHOW TABLES; #查询使用的数据库所有表
+SHOW CREATE TABLE tb_user #查询指定表的建表语句
+```
 
 **创建表：**
 
@@ -101,67 +64,62 @@ mysql> CREATE TABLE TB_USER(
     -> age int COMMENT '年龄',
     -> gender varchar(50) COMMENT '性别'
     -> ) COMMENT '用户表';
-Query OK, 0 rows affected (0.04 sec)
-```
-
-**查询当前使用数据库所有表：**
-
-```shell
-mysql> SHOW TABLES;
-+----------------------+
-| Tables_in_mydatabase |
-+----------------------+
-| tb_user              |
-+----------------------+
-1 row in set (0.00 sec)
-```
-
-**查询表结构：**
-
-```shell
-mysql> DESC tb_user;
-+--------+-------------+------+-----+---------+-------+
-| Field  | Type        | Null | Key | Default | Extra |
-+--------+-------------+------+-----+---------+-------+
-| id     | int         | YES  |     | NULL    |       |
-| name   | varchar(50) | YES  |     | NULL    |       |
-| age    | int         | YES  |     | NULL    |       |
-| gender | varchar(50) | YES  |     | NULL    |       |
-+--------+-------------+------+-----+---------+-------+
-4 rows in set (0.00 sec)
-```
-
-**查询指定表的建表语句：**
-
-```shell
-mysql> SHOW CREATE TABLE tb_user;
-+---------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| Table   | Create Table
-
-
-                                                            |
-+---------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| tb_user | CREATE TABLE `tb_user` (
-  `id` int DEFAULT NULL COMMENT '编号',
-  `name` varchar(50) DEFAULT NULL COMMENT '姓名',
-  `age` int DEFAULT NULL COMMENT '年龄',
-  `gender` varchar(50) DEFAULT NULL COMMENT '性别'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='用户 表' |
-+---------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-1 row in set (0.01 sec)
 ```
 
 ## DDL操作表-删除&修改&添加
 
-- 新增： `ALTER TABLE 表名 add 字段名 类型 comment '描述';`
+- 新增： `ALTER TABLE 表名 ADD 字段名 类型 COMMENT '描述';`
 - 修改数据类型：`ALTER TABLE 表名 MODIFY 字段名 新类型;`
-- 修改字段名和字段类型：`ALTER TABLE 表名 CHANGE 旧字段名 新字段名 类型(长度) comment '描述' [约束];`
+- 修改字段名和字段类型：`ALTER TABLE 表名 CHANGE 旧字段名 新字段名 类型(长度) COMMENT '描述' [约束];`
 
 ```shell
-# 新增
-mysql> alter table staff add nickname varchar(20) comment '昵称';
-# 修改
-mysql> alter table staff modify age tinyint unsigned;
-# 修改字段名和字段类型：
-mysql> alter table staff change nickname realname char(4) comment '真实名字';
+# 新增nickname字段，类型VARCHAR(20)，描述：昵称
+ALTER TABLE staff ADD nickname VARCHAR(20) COMMENT '昵称';
+# 修改表中的age类型为TINYINT UNSIGNED
+ALTER TABLE staff MODIFY age TINYINT UNSIGNED;
+# 修改字段名nickname为realname，类型：char(4)，描述：'真实名字'
+ALTER TABLE staff CHANGE nickname realname char(4) COMMENT '真实名字';
 ```
+
+## DML-数据操作
+
+- 新增：`INSERT INTO  表名(字段1,字段2) VALUES(值1,值2,...);`
+- 修改：`UPDATE 表名 SET 字段1=值1，字段2=值2...[ WHERE 条件 ];`
+- 删除：`DELETE FROM 表名 [WHERE 条件];`
+
+**新增：**
+
+> **注意：** 新增数据时，指定的字段顺序需要与值的顺序时一一对应的。字符串和日期类型数据应该包含再引号中，新增的数据大小，应该再字段的规定范围内。
+
+```shell
+#1.给表中所有字段添加值
+INSERT INTO staff VALUES(value1,value2,value3,...);
+#2.给指定字段添加值，即：column1字段对应value1值。
+INSERT INTO table_name (column1,column2,column3,...) 
+VALUES(value1,value2,value3,...);
+#3.批量添加数据
+INSERT INTO staff VALUES(value1,value2,value3,...),(value1,value2,value3,...),(value1,value2,value3,...);
+#3.1批量添加对应字段数据
+INSERT INTO table_name (column1,column2,column3,...) 
+VALUES(value1,value2,value3,...),(value1,value2,value3,...),(value1,value2,value3,...);
+```
+
+**修改：**
+
+> **注意：** 修改语句的条件可以有，也可以没有，如果没有条件，则会修改整张表的所有数据
+
+```shell
+# 修改staff表中nickname和age,WHERE id=1:表示修改ID=1的这一条数据。
+UPDATE staff SET nickname='张三',age=24 WHERE id=1;
+```
+
+**删除：**
+
+> **注意：** 如果没有添加条件则删除整张表的数据，DELETE无法删除单个字段值如果要删除单个字段值可以使用UPDATE把这个字段值设置为null。
+
+```shell
+# 删除staff表中ID=1的这条数据
+DELETE FROM staff WHERE id=1;
+```
+
+## DQL基础查询
