@@ -1,13 +1,24 @@
-# SQL基础命令
+# 1. SQL基础命令
 
-## SQL分类
+- [1. SQL基础命令](#1-sql基础命令)
+  - [1.1. SQL分类](#11-sql分类)
+  - [1.2. DDL数据库操作](#12-ddl数据库操作)
+    - [1.2.1. 查询\&创建](#121-查询创建)
+    - [1.2.2. 删除\&修改\&添加](#122-删除修改添加)
+  - [1.3. DML-数据操作](#13-dml-数据操作)
+    - [1.3.1. 新增](#131-新增)
+    - [1.3.2. 修改](#132-修改)
+    - [1.3.3. 删除](#133-删除)
+  - [1.4. DQL基础查询](#14-dql基础查询)
+
+## 1.1. SQL分类
 
 - `DDL`：数据定义语言，用来定义数据库对象（数据库，表，字段）
 - `DML`：数据操作语言，用来对数据库表中的数据进行增删改查。
 - `DQL`：数据查询语言，用来查询数据库中表的记录。
 - `DCL`：数据控制语言，用来创建数据库用户，控制数据库的访问权限。
 
-## DDL数据库操作
+## 1.2. DDL数据库操作
 
 > 在命令后面要加上`;`
 
@@ -42,7 +53,7 @@ DROP DATABASE IF EXISTS mydatabase; #myDataBase
 USE mydatabase; #使用mydatabase数据库
 ```
 
-## DDL操作表-查询&创建
+### 1.2.1. 查询&创建
 
 - `SHOW TABLES`：查询使用的数据库所有表
 - `DESC 表名;` ：查询表结构
@@ -66,7 +77,7 @@ mysql> CREATE TABLE TB_USER(
     -> ) COMMENT '用户表';
 ```
 
-## DDL操作表-删除&修改&添加
+### 1.2.2. 删除&修改&添加
 
 - 新增： `ALTER TABLE 表名 ADD 字段名 类型 COMMENT '描述';`
 - 修改数据类型：`ALTER TABLE 表名 MODIFY 字段名 新类型;`
@@ -81,13 +92,13 @@ ALTER TABLE staff MODIFY age TINYINT UNSIGNED;
 ALTER TABLE staff CHANGE nickname realname char(4) COMMENT '真实名字';
 ```
 
-## DML-数据操作
+## 1.3. DML-数据操作
 
 - 新增：`INSERT INTO  表名(字段1,字段2) VALUES(值1,值2,...);`
 - 修改：`UPDATE 表名 SET 字段1=值1，字段2=值2...[ WHERE 条件 ];`
 - 删除：`DELETE FROM 表名 [WHERE 条件];`
 
-**新增：**
+### 1.3.1. 新增
 
 > **注意：** 新增数据时，指定的字段顺序需要与值的顺序时一一对应的。字符串和日期类型数据应该包含再引号中，新增的数据大小，应该再字段的规定范围内。
 
@@ -104,7 +115,7 @@ INSERT INTO table_name (column1,column2,column3,...)
 VALUES(value1,value2,value3,...),(value1,value2,value3,...),(value1,value2,value3,...);
 ```
 
-**修改：**
+### 1.3.2. 修改
 
 > **注意：** 修改语句的条件可以有，也可以没有，如果没有条件，则会修改整张表的所有数据
 
@@ -113,7 +124,7 @@ VALUES(value1,value2,value3,...),(value1,value2,value3,...),(value1,value2,value
 UPDATE staff SET nickname='张三',age=24 WHERE id=1;
 ```
 
-**删除：**
+### 1.3.3. 删除
 
 > **注意：** 如果没有添加条件则删除整张表的数据，DELETE无法删除单个字段值如果要删除单个字段值可以使用UPDATE把这个字段值设置为null。
 
@@ -122,4 +133,4 @@ UPDATE staff SET nickname='张三',age=24 WHERE id=1;
 DELETE FROM staff WHERE id=1;
 ```
 
-## DQL基础查询
+## 1.4. DQL基础查询
