@@ -66,10 +66,10 @@ USE mydatabase; #使用mydatabase数据库
 
 ### 1.2.2. 操作表
 
-- `SHOW TABLES`：查询使用的数据库所有表
-- `DESC 表名;` ：查询表结构
-- `SHOW CREATE TABLE 表名;` ：查询指定表的建表语句
-- `CREATE TABLE 表名（字段1 字段1类型[COMMENT 字段注释]）[COMMENT 表注释];`：创建表，**注意：最后一个字段没有逗号**
+- 查询使用的数据库所有表：`SHOW TABLES`
+- 查询表结构：`DESC 表名;`
+- 查询指定表的建表语句：`SHOW CREATE TABLE 表名;` 
+- 创建表：`CREATE TABLE 表名（字段1 字段1类型[COMMENT 字段注释]）[COMMENT 表注释];`
 
 #### 1.2.2.1. 查询表
 
@@ -80,6 +80,8 @@ SHOW CREATE TABLE tb_user #查询指定表的建表语句
 ```
 
 #### 1.2.2.2. 创建表
+
+> **注意：** 最后一个字段没有逗号
 
 ```shell
 mysql> CREATE TABLE TB_USER(
