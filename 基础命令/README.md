@@ -195,13 +195,43 @@ SELECT nickname 昵称 FROM staff;
 
 ### 条件查询(WHERE)
 
+```shell
+# 查询没有年龄的数据
+SELECT * FROM staff WHERE age IS NULL;
+# 查询有年龄的数据
+SELECT * FROM staff WHERE age IS NOT NULL;
+# 查询年龄在15到20之间的信息BETWEEN前为最小值AND后为最大值。
+SELECT * FROM staff WHERE age BETWEEN 15 AND 20;
+# 查询年龄等于18或20或40
+SELECT * FROM staff WHERE age in(18,20,40);
+# 查询姓名两个字的信息，查询两个字符设置两个下划线
+SELECT * FROM staff WHERE name LIKE '__';
+# 查询身份证号最后一位是X的员工信息，%表示前面多少位数无关，但是最后一位必须是X
+SELECT * FROM staff WHERE name LIKE '%X';
+```
+
 ### 聚合函数
 
-- `count`
-- `max`
-- `min`
-- `avg`
-- `sum`
+将一列数据最为一个整体，进行纵向计算。
+
+> 所有`NULL`值的字段是不参与聚合函数计算
+
+- `count`：统计数量
+- `max`：最大值
+- `min`：最小值
+- `avg`：平均值
+- `sum`：求和
+
+`SELECT` 聚合函数(字段列表) `FROM` 表名;
+
+```shell
+# 统计整张表的数量
+SELECT COUNT(*) FROM staff;
+# 查询年龄最大值
+SELECT MXA(age) FROM staff;
+# 统计西安地区员工的年龄之和
+SELECT SUM(age) FROM staff WHERE workaddress = '西安';
+```
 
 ### 分组查询(GROUP BY)
 
