@@ -235,6 +235,23 @@ SELECT SUM(age) FROM staff WHERE workaddress = '西安';
 
 ### 分组查询(GROUP BY)
 
+**语法：**
+`SELECT` 字段列表 `FROM` 表名 [`WHERE` 条件] `GROUP BY` 分组字段名 [`HAVING` 分组后过滤条件];
+
+**WHERE与HAVING区别：**
+
+- 执行时机不同：`WHERE`是分组之前进行过滤，不满足`WHERE`条件，不参与分组;而`HAVING`是分组之后对结果进行过滤。
+- 判断条件不同：`WHERE`不能对聚合函数进行判断，而`HAVING`可以。
+
+```shell
+# 根据性别分组，统计男性员工和女性员工的数量，gender,count(*) 查询同时把性别字段显示
+SELECT gender,count(*) FROM staff GROUP BY gender;
+# 根据性别分组，统计男性员工和女性员工平均年龄
+SELECT gender,AVG(age) FROM staff GROUP BY gender;
+# 查询年龄小于45的员工，并根据工作地址分组，获取员工数量大于等于3的工作地址
+SELECT workaddress,count(*) FROM staff where age < 45 GROUP BY workaddress HAVING count(*) >= 3;
+```
+
 ### 排序查询(ORDER BY)
 
 ### 分页查询(LIMIT)
