@@ -254,7 +254,11 @@ SELECT workaddress,count(*) FROM staff where age < 45 GROUP BY workaddress HAVIN
 
 ### 排序查询(ORDER BY)
 
-**语法：** `SELECT` 字段列表 `FROM` 表名 `ORDER BY` 字段1 排序方式1,字段2 排序方式2
+**语法：**
+
+```SQL
+SELECT 字段列表 FROM 表名 ORDER BY 字段1 排序方式1,字段2 排序方式2;
+```
 
 - `ASC`：升序（默认值）
 - `DESC`：降序
@@ -269,3 +273,22 @@ SELECT * FROM staff ORDER BY age DESC,time ASC
 ```
 
 ### 分页查询(LIMIT)
+
+**语法：**
+
+```SQL
+SELECT 字段列表 FROM 表名 LIMIT 起始索引,查询记录数;
+```
+
+- 起始索引从0开始，起始索引 = （查询页码-1）*每页显示记录数。
+- 分页查询是数据库的方言，不同的数据库有不同的实现，`MySQL`中是`LIMIT`。
+- 如果查询的是第一页数据，起始索引可以省略，直接简写为`LIMIT 10`。
+
+```SQL
+# 查询第一页的数据，每页展示10条
+SELECT * FROM staff LIMIT 0,10;
+# 简写：第一页可以省略不写
+SELECT * FROM staff LIMIT 10;
+# 查询第二页数据，每页展示10条
+SELECT * FROM staff LIMIT 10,10;
+```
