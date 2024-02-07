@@ -35,11 +35,13 @@
 
 ## DDL操作（数据库，表，字段）
 
-> 在命令后面要加上`;`
+> 在部分命令后面要加上`;`
 
 ### 数据库操作
 
 #### 查询数据库
+
+**语法：**
 
 ```SQL
 SHOW DATABASES; #查询所有数据库
@@ -48,7 +50,11 @@ SELECT DATABASE(); #查询当前数据库
 
 #### 创建数据库
 
-`CREATE DATABASE`创建数据库 `IF NOT EXISTS`：创建不存在的数据库，`DEFAULT CHARSET`：设置字符集一般设置：`utf8mb4`，`COLLATE`：排序规则
+**语法：**
+
+```SQL
+CREATE DATABASE 数据库名称 IF NOT EXISTS 条件 DEFAULT CHARSET 设置字符集一般设置utf8mb4,COLLATE 排序规则
+```
 
 ```SQL
 CREATE DATABASE myDataBase; #创建myDataBase数据库
@@ -56,7 +62,11 @@ CREATE DATABASE myDataBase; #创建myDataBase数据库
 
 #### 删除数据库
 
-`DROP DATABASE`删除指定数据库`IF EXISTS`：判断是否存在
+**语法：**
+
+```SQL
+DROP DATABASE 数据库名称 IF EXISTS 条件判断是否存在
+```
 
 ```SQL
 DROP DATABASE IF EXISTS mydatabase; #myDataBase
@@ -64,7 +74,7 @@ DROP DATABASE IF EXISTS mydatabase; #myDataBase
 
 #### 使用数据库
 
-`USE`：数据库名
+**语法：**
 
 ```SQL
 USE mydatabase; #使用mydatabase数据库
@@ -90,21 +100,28 @@ SHOW CREATE TABLE tb_user #查询指定表的建表语句
 > **注意：** 最后一个字段没有逗号
 
 ```SQL
-mysql> CREATE TABLE TB_USER(
-    -> id int COMMENT '编号',
-    -> name varchar(50) COMMENT '姓名',
-    -> age int COMMENT '年龄',
-    -> gender varchar(50) COMMENT '性别'
-    -> ) COMMENT '用户表';
+CREATE TABLE TB_USER(
+ id int COMMENT '编号',
+ name varchar(50) COMMENT '姓名',
+ age int COMMENT '年龄',
+ gender varchar(50) COMMENT '性别'
+ ) COMMENT '用户表';
 ```
 
 ### 字段操作
 
 #### 删除&修改&新增
 
-- 新增： `ALTER TABLE 表名 ADD 字段名 类型 COMMENT '描述';`
-- 修改数据类型：`ALTER TABLE 表名 MODIFY 字段名 新类型;`
-- 修改字段名和字段类型：`ALTER TABLE 表名 CHANGE 旧字段名 新字段名 类型(长度) COMMENT '描述' [约束];`
+**语法：**
+
+```SQL
+#新增：
+ALTER TABLE 表名 ADD 字段名 类型 COMMENT '描述';
+#修改数据类型
+ALTER TABLE 表名 MODIFY 字段名 新类型;
+#修改字段名和字段类型
+ALTER TABLE 表名 CHANGE 旧字段名 新字段名 类型(长度) COMMENT '描述' 约束;
+```
 
 ```SQL
 # 新增nickname字段，类型VARCHAR(20)，描述：昵称
@@ -125,6 +142,8 @@ ALTER TABLE staff CHANGE nickname realname char(4) COMMENT '真实名字';
 
 > **注意：** 新增数据时，指定的字段顺序需要与值的顺序时一一对应的。字符串和日期类型数据应该包含再引号中，新增的数据大小，应该再字段的规定范围内。
 
+**语法：**
+
 ```SQL
 #1.给表中所有字段添加值
 INSERT INTO staff VALUES(value1,value2,value3,...);
@@ -140,6 +159,12 @@ VALUES(value1,value2,value3,...),(value1,value2,value3,...),(value1,value2,value
 
 ### 修改
 
+**语法：**
+
+```SQL
+UPDATE 表名 SET 字段名=值,字段名=值 WHERE 条件;
+```
+
 > **注意：** 修改语句的条件可以有，也可以没有，如果没有条件，则会修改整张表的所有数据
 
 ```SQL
@@ -148,6 +173,12 @@ UPDATE staff SET nickname='张三',age=24 WHERE id=1;
 ```
 
 ### 删除
+
+**语法：**
+
+```SQL
+DELETE FROM 表名 WHERE 条件;
+```
 
 > **注意：** 如果没有添加条件则删除整张表的数据，DELETE无法删除单个字段值如果要删除单个字段值可以使用UPDATE把这个字段值设置为null。
 
@@ -174,9 +205,13 @@ LIMIT 分页参数
 
 ### 基础查询
 
-- `SELECT` 字段1,字段2,字段3... `FROM` 表名;
-- `SELECT` * `FROM` 表名;
-- `SELECT` 字段1 [AS 别名1],字段2 [AS 别名2],字段3 [AS 别名3],... `FROM` 表名;
+**语法：**
+
+```SQL
+SELECT 字段1,字段2,字段3... FROM 表名;
+SELECT * FROM 表名;
+SELECT 字段1 AS 别名1,字段2 AS 别名2,字段3 AS 别名3,... FROM 表名;
+```
 
 > 设置别名为可选参数，在设置别名时可以省略`AS`
 
@@ -194,6 +229,12 @@ SELECT nickname 昵称 FROM staff;
 ```
 
 ### 条件查询(WHERE)
+
+**语法：**
+
+```SQL
+SELECT 字段列表 FROM 表名 WHERE 条件;
+```
 
 ```SQL
 # 查询没有年龄的数据
@@ -214,6 +255,12 @@ SELECT * FROM staff WHERE name LIKE '%X';
 
 将一列数据最为一个整体，进行纵向计算。
 
+**语法：**
+
+```SQL
+SELECT 聚合函数(字段列表) FROM 表名;
+```
+
 > 所有`NULL`值的字段是不参与聚合函数计算
 
 - `count`：统计数量
@@ -222,7 +269,7 @@ SELECT * FROM staff WHERE name LIKE '%X';
 - `avg`：平均值
 - `sum`：求和
 
-`SELECT` 聚合函数(字段列表) `FROM` 表名;
+
 
 ```SQL
 # 统计整张表的数量
@@ -236,7 +283,10 @@ SELECT SUM(age) FROM staff WHERE workaddress = '西安';
 ### 分组查询(GROUP BY)
 
 **语法：**
-`SELECT` 字段列表 `FROM` 表名 [`WHERE` 条件] `GROUP BY` 分组字段名 [`HAVING` 分组后过滤条件];
+
+```SQL
+SELECT 字段列表 FROM 表名 WHERE 条件 GROUP BY 分组字段名 HAVING 分组后过滤条件;
+```
 
 **WHERE与HAVING区别：**
 
