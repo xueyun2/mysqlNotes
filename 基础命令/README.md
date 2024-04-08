@@ -24,6 +24,8 @@
     - [分组查询(GROUP BY)](#分组查询group-by)
     - [排序查询(ORDER BY)](#排序查询order-by)
     - [分页查询(LIMIT)](#分页查询limit)
+    - [DQL执行顺序](#dql执行顺序)
+    - [DCL-用户，访问，权限](#dcl-用户访问权限)
 
 ## SQL分类
 
@@ -336,4 +338,44 @@ SELECT * FROM staff LIMIT 0,10;
 SELECT * FROM staff LIMIT 10;
 # 查询第二页数据，每页展示10条
 SELECT * FROM staff LIMIT 10,10;
+```
+
+### DQL执行顺序
+
+```sql
+1.FROM  #表列表
+2.WHERE #条件
+3.GROUP BY #分组字段
+4.SELECT #字段列表
+5.ORDER BY #排序字段列表
+6.LIMIT #分页参数
+```
+
+### DCL-用户，访问，权限
+
+用来管理数据库用户，控制数据库的访问 权限。
+
+**管理用户：**
+
+主机名：`localhost`表示只能在当前主机下访问，设置`%`号即可在任意主机下访问。
+
+```sql
+
+# 查询用户
+
+USE mysql;
+SELECT * FROM user;
+
+# 创建用户
+
+CREATE USER '用户名'@'主机名' IDENTIFIED BY '密码';
+
+# 修改用户
+# mysql_native_password 是mysql中的一个加密方式
+
+CREATE USER '用户名'@'主机名' IDENTIFIED WITH mysql_native_password BY '新密码';
+
+# 删除用户
+
+DROP USER '用户名'@'主机名';
 ```
