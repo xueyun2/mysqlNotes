@@ -379,3 +379,29 @@ CREATE USER '用户名'@'主机名' IDENTIFIED WITH mysql_native_password BY '�
 
 DROP USER '用户名'@'主机名';
 ```
+
+**权限控制：**
+
+常用权限表，其他权限可参考官方文档
+
+|权限|说明|
+|---|---|
+|ALL,ALLPRIVILEGES|所有权限|
+|SELECT|查询数据|
+|INSERT|插入数据|
+|UPDATE|修改数据|
+|DELETE|删除数据|
+|ALTER|修改表|
+|DROP|删除数据库/表/视图|
+|CREATE|创建数据库/表|
+
+> 多个权限之间，使用逗号分隔
+
+```sql
+# 1.查询权限
+SHOW GRANTS FOR '用户名'@'主机名';
+# 2.授予权限,如果授予所有数据库和表可以设置*号
+GRANT 权限列表 ON 数据库名,表名 TO '用户名'@'主机名';
+# 3.撤销权限
+REVOKE 权限列表 ON 数据库名,表名 FROM '用户名'@'主机名';
+```
