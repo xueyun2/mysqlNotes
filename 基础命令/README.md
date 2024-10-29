@@ -27,6 +27,9 @@
     - [DQL执行顺序](#dql执行顺序)
     - [DCL-用户，访问，权限](#dcl-用户访问权限)
   - [函数](#函数)
+    - [字符串函数](#字符串函数)
+    - [数值函数](#数值函数)
+    - [日期函数](#日期函数)
   - [约束](#约束)
   - [多表查询](#多表查询)
   - [事务](#事务)
@@ -126,6 +129,8 @@ ALTER TABLE 表名 ADD 字段名 类型 COMMENT '描述';
 ALTER TABLE 表名 MODIFY 字段名 新类型;
 #修改字段名和字段类型
 ALTER TABLE 表名 CHANGE 旧字段名 新字段名 类型(长度) COMMENT '描述' 约束;
+# 判断字段名是否存在，存在则删除该字段
+ALTER TABLE 表名 DROP 字段名 IF EXISTS 字段名;;
 ```
 
 ```SQL
@@ -388,16 +393,16 @@ DROP USER '用户名'@'主机名';
 
 常用权限表，其他权限可参考官方文档
 
-|权限|说明|
-|---|---|
-|ALL,ALLPRIVILEGES|所有权限|
-|SELECT|查询数据|
-|INSERT|插入数据|
-|UPDATE|修改数据|
-|DELETE|删除数据|
-|ALTER|修改表|
-|DROP|删除数据库/表/视图|
-|CREATE|创建数据库/表|
+| 权限              | 说明               |
+| ----------------- | ------------------ |
+| ALL,ALLPRIVILEGES | 所有权限           |
+| SELECT            | 查询数据           |
+| INSERT            | 插入数据           |
+| UPDATE            | 修改数据           |
+| DELETE            | 删除数据           |
+| ALTER             | 修改表             |
+| DROP              | 删除数据库/表/视图 |
+| CREATE            | 创建数据库/表      |
 
 > 多个权限之间，使用逗号分隔
 
@@ -417,9 +422,85 @@ REVOKE 权限列表 ON 数据库名,表名 FROM '用户名'@'主机名';
 - 日期函数
 - 流程函数
 
+### 字符串函数
+
+- `CONCAT(s1,s2..sn)`：将多个字符串拼接成一个字符串
+- `LOWER(str)`：将字符串全部转换成小写
+- `UPPER(str)`：将字符串全部转换成大写
+- `LENGTH(str)`：获取字符串长度
+- `LPAD(str,n,pad)`：用pad在str左边填充，到n个字符长度
+- `RPAD(str,n,pad)`：用pad在str右边填充，到n个字符长度
+- `TRIM(str)`：去掉字符串左右两边的空格
+- `SUBTRING(str,start,len)`：从str字符串中截取从start位置开始，len个长度的字符串
+
 ```sql
-select concat('')
+# 字符串拼接
+SELECT CONCAT('hello','mysql');
+# hellomysql
+# 字符串转小写
+SELECT LOWER('HELLO');
+# hello
+# 字符串转大写
+SELECT UPPER('hello');
+# HELLO
+# 获取字符串长度
+SELECT LENGTH('hello');
+# 5
+# 左填充
+SELECT LPAD('hello',10,'*');
+# *****hello
+# 右填充
+SELECT RPAD('hello',10,'*');
+# hello*****
+# 去掉左右空格
+SELECT TRIM('  he llo  ');
+# he llo
+# 截取字符串
+SELECT SUBSTRING('hello',2,3);
+# ell
+
 ```
+
+修改`article`表中的`serial`字段，将其填充到3位，不足3位的在左边填充0
+
+```sql
+update article set serial=lpad(serial,3,'0');
+```
+
+### 数值函数
+
+- `CEIL(z)`：向上取整
+- `FLOOR(z)`：向下取整
+- `MOD(x/y)`：返回x/y的模
+- `RAND()`：返回0-1内的随机数
+- `ROUND(x,y)`：求参数x的四舍五入的值，保留y位小数
+
+```sql
+# 向上取整
+SELECT CEIL(1.1);
+# 2
+# 向下取整
+SELECT FLOOR(1.9);
+# 1
+# 求模（求余数）
+SELECT MOD(10,3);
+# 1
+# 求随机数
+SELECT RAND();
+# 0.123456789
+# 求四舍五入，保留2位小数
+SELECT ROUND(1.12345,2);
+# 生成一个六位数的验证码
+# 1.生成一个0-1之间的随机数
+# 2.乘以1000000，生成一个0-1000000之间的随机数
+# 3.四舍五入，保留0位小数
+# 4.不足6位数，向左填充0保证是6位数
+SELECT LPAD(ROUND(RAND()*1000000,0),6,'0');
+# 299140
+```
+
+### 日期函数
+
 
 ## 约束
 
