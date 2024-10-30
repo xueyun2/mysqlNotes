@@ -30,6 +30,7 @@
     - [字符串函数](#字符串函数)
     - [数值函数](#数值函数)
     - [日期函数](#日期函数)
+  - [流程函数](#流程函数)
   - [约束](#约束)
   - [多表查询](#多表查询)
   - [事务](#事务)
@@ -501,6 +502,39 @@ SELECT LPAD(ROUND(RAND()*1000000,0),6,'0');
 
 ### 日期函数
 
+- `CURDATE();` 获取当前日期
+- `CURTIME();` 获取当前时间
+- `NOW();` 获取当前日期和时间
+- `YEAR(date);` 获取date年
+- `MONTH(date);` 获取date月
+- `DAY(date);` 获取date日
+- `DATE_ADD(date,INTERVAL expr type);` 给当前日期添加一个间隔，expr表示时间间隔多少，type表示时间间隔类型，如：`INTERVAL 70 DAY` 表示70天,`INTERVAL`为固定值。
+
+- `DATEDIFF(date1,date2);` 返回起始时间date1和结束时间date2之间的天数
+
+```sql
+# 查询article表中的所有文章，按照文章发表日期于当前日期间隔进行排序，并显示文章标题和发表天数
+# 由于使用到`datediff(curdate(),created_at)`太长给该函数设置一个别名方便后续排序使用。
+# 正序
+select title,datediff(curdate(),created_at) as 'entrydays' from article order by entrydays;
+# 倒叙
+select title,datediff(curdate(),created_at) as 'entrydays' from article order by entrydays desc;
+```
+
+## 流程函数
+
+- `IF(value,t,f)`：如果value为true，则返回t，否则返回f
+- `IFNULL(value1,value2)`：如果value1不为空，则返回value1，否则返回value2
+- `CASE WHEN [val1] THEN [res1]...ELSE [default] END`：如果val1为true，则返回res1，否则返回default
+- `CASE [expr] WHEN [val1] THEN [res1]...ELSE [default] END`：如果expr等于val1，则返回res1，否则返回default
+
+```sql
+# 如果workaddress为北京,上海则返回一线城市，否则返回二线城市
+select
+name
+( case workaddress when'北京'then'一线城市'when'上海'then'一线城市'else'二线城市'end )as'工作地址'
+from emp;
+```
 
 ## 约束
 
