@@ -32,6 +32,7 @@
     - [日期函数](#日期函数)
   - [流程函数](#流程函数)
   - [约束](#约束)
+  - [外键约束](#外键约束)
   - [多表查询](#多表查询)
   - [事务](#事务)
 
@@ -537,6 +538,74 @@ from emp;
 ```
 
 ## 约束
+
+- `NOT NULL`：限制该字段不能为null
+- `UNIQUE`：限制该字段不能重复
+- `PRIMARY KEY`：主键，限制该字段不能重复，并且不能为空，一个表只能有一个主键
+- `DEFAULT`：保存数据时，如果没有指定该字段值，则采用默认值
+- `FOREIGN KEY`：用来让两张表的数据之间建立连接，保证数据的一致性和完整性。
+- `CHECK`：保证字段值满足某一个条件。**注意：在8.0.16之后支持**
+
+```sql
+create table user(
+  # 自增主键，自动增长
+  id int primary key auto_increment comment '主键',
+  # 该字段不能空，并且不能重复，并且长度不能超过10个字符
+  name varchar(10) not null unique comment '姓名',
+  # 该字段值必须大于0并且小于等于120
+  age int check(age>0&&age<=120) comment '年龄',
+  # 如果该字段没有值则使用默认值1
+  status char(1) default '1' comment '状态',
+  gender char(1) comment '性别'
+  ) comment '用户表';
+```
+
+## 外键约束
+
+```sql
+CREATE TABLE 表名(
+  字段名 类型,
+  ...
+  CONSTRAINT 外键名称 FOREIGN KEY (外键字段名) REFERENCES 主表(主表列名)
+)
+# 给现有的表添加外键约束
+ALTER TABLE 表名 ADD CONSTRAINT 外键名称 FOREIGN KEY (外键字段名) REFERENCES 主表(主表列名);
+# 删除外键约束
+ALTER TABLE 表名 DROP FOREIGN KEY 外键名称;
+```
+
+例子：
+
+```shell
+# dept表
++----+--------+
+| id | name   |
++----+--------+
+|  1 | 研发部 |
+|  2 | 市场部 |
+|  3 | 财务部 |
+|  4 | 销售部 |
+|  5 | 总经办 |
++----+--------+
+# emp表
++----+--------+------+----------+--------+------------+-----------+---------+
+| id | name   | age  | job      | salary | entrydate  | managerid | dept_id |
++----+--------+------+----------+--------+------------+-----------+---------+
+|  1 | 王锤   |   23 | 后端     |  20000 | 2024-10-31 |         6 |       1 |
+|  2 | 张大侠 |   14 | 销售     |   3000 | 2024-10-31 |         7 |       4 |
+|  3 | 张三   |   29 | 市场调研 |  10000 | 2024-10-31 |         9 |       3 |
+|  4 | 李小龙 |   24 | 前端     |  20000 | 2024-10-31 |         8 |       1 |
++----+--------+------+----------+--------+------------+-----------+---------+
+```
+
+给以上emp表添加外键约束，dept_id字段关联dept表的id字段。
+
+```sql
+# 给emp表的dept_id字段添加外键约束
+ALTER TABLE emp ADD CONSTRAINT fk_emp_dept_id FOREIGN KEY (dept_id) REFERENCES dept(id);
+# 删除外键约束
+ALTER TABLE emp DROP FOREIGN KEY fk_emp_dept_id;
+```
 
 ## 多表查询
 
