@@ -509,7 +509,8 @@ SELECT LPAD(ROUND(RAND()*1000000,0),6,'0');
 - `YEAR(date);` 获取date年
 - `MONTH(date);` 获取date月
 - `DAY(date);` 获取date日
-- `DATE_ADD(date,INTERVAL expr type);` 给当前日期添加一个间隔，expr表示时间间隔多少，type表示时间间隔类型，如：`INTERVAL 70 DAY` 表示70天,`INTERVAL`为固定值。
+- `DATE_ADD(date,INTERVAL expr type);` 给当前日期添加一个间隔，expr表示时间间隔多少，type表示时间间隔类型，如：
+  `INTERVAL 70 DAY` 表示70天,`INTERVAL`为固定值。
 
 - `DATEDIFF(date1,date2);` 返回起始时间date1和结束时间date2之间的天数
 
