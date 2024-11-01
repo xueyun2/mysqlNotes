@@ -25,7 +25,7 @@
     - [排序查询(ORDER BY)](#排序查询order-by)
     - [分页查询(LIMIT)](#分页查询limit)
     - [DQL执行顺序](#dql执行顺序)
-    - [DCL-用户，访问，权限](#dcl-用户访问权限)
+  - [DCL-用户，访问，权限](#dcl-用户访问权限)
   - [函数](#函数)
     - [字符串函数](#字符串函数)
     - [数值函数](#数值函数)
@@ -33,6 +33,7 @@
   - [流程函数](#流程函数)
   - [约束](#约束)
   - [外键约束](#外键约束)
+    - [外键约束-删除更新操作](#外键约束-删除更新操作)
   - [多表查询](#多表查询)
   - [事务](#事务)
 
@@ -362,7 +363,7 @@ SELECT * FROM staff LIMIT 10,10;
 6.LIMIT #分页参数
 ```
 
-### DCL-用户，访问，权限
+## DCL-用户，访问，权限
 
 用来管理数据库用户，控制数据库的访问 权限。
 
@@ -607,6 +608,22 @@ ALTER TABLE emp ADD CONSTRAINT fk_emp_dept_id FOREIGN KEY (dept_id) REFERENCES d
 # 删除外键约束
 ALTER TABLE emp DROP FOREIGN KEY fk_emp_dept_id;
 ```
+
+### 外键约束-删除更新操作
+
+| 行为                    | 说明                                                                                                       |
+| ----------------------- | ---------------------------------------------------------------------------------------------------------- |
+| `NO ACTION`、`RESTRICT` | 当在父表中删除/更新对应记录时，首先检查该记录是否又对应的外键，如果有则不允许删除/更新。（与RESTRICT一致） |
+| `CASCADE`               | 当父表中的记录被删除或更新时，子表中的对应记录也会自动删除或更新。                                         |
+| `SET NULL`              | 当父表中的记录被删除或更新时，子表中的对应记录的外键字段会自动设置为NULL。                                 |
+| `SET DEFAULT`           | 父表有变更时，子表将外键列设置成一个默认的值（innodb不支持）                                               |
+
+```sql
+# 给emp表的dept_id字段添加外键约束，当删除/更新dept表中的记录时，emp表中的对应记录也会自动删除或更新。 ON DELETE 删除后执行的操作 ON UPDATE 更新后执行操作
+
+ALTER TABLE emp ADD CONSTRAINT fk_emp_dept_id FOREIGN KEY (dept_id) REFERENCES dept(id) ON UPDATE CASCADE ON DELETE CASCADE;
+```
+
 
 ## 多表查询
 
