@@ -30,7 +30,7 @@
     - [字符串函数](#字符串函数)
     - [数值函数](#数值函数)
     - [日期函数](#日期函数)
-  - [流程函数](#流程函数)
+    - [流程函数](#流程函数)
   - [约束](#约束)
   - [外键约束](#外键约束)
     - [外键约束-删除更新操作](#外键约束-删除更新操作)
@@ -524,7 +524,7 @@ select title,datediff(curdate(),created_at) as 'entrydays' from article order by
 select title,datediff(curdate(),created_at) as 'entrydays' from article order by entrydays desc;
 ```
 
-## 流程函数
+### 流程函数
 
 - `IF(value,t,f)`：如果value为true，则返回t，否则返回f
 - `IFNULL(value1,value2)`：如果value1不为空，则返回value1，否则返回value2
@@ -623,7 +623,6 @@ ALTER TABLE emp DROP FOREIGN KEY fk_emp_dept_id;
 
 ALTER TABLE emp ADD CONSTRAINT fk_emp_dept_id FOREIGN KEY (dept_id) REFERENCES dept(id) ON UPDATE CASCADE ON DELETE CASCADE;
 ```
-
 
 ## 多表查询
 
