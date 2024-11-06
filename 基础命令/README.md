@@ -35,6 +35,9 @@
   - [外键约束](#外键约束)
     - [外键约束-删除更新操作](#外键约束-删除更新操作)
   - [多表查询](#多表查询)
+    - [内连接](#内连接)
+    - [外连接](#外连接)
+    - [自连接](#自连接)
   - [事务](#事务)
 
 ## SQL分类
@@ -625,5 +628,48 @@ ALTER TABLE emp ADD CONSTRAINT fk_emp_dept_id FOREIGN KEY (dept_id) REFERENCES d
 ```
 
 ## 多表查询
+
+查询多张表时以逗号分隔
+
+```sql
+# 多表查询，筛选emp表中dept_id等于dept表中的id的数据;
+SELECT * FROM emp,dept WHERE emp.dept_id=dept.id;
+
+# 查询emp和dept表中的name字段,emp.dept_id = dept.id的数据。
+SELECT emp.name,dept.name FROM emp,dept WHERE emp.dept_id = dept.id;
+
+# 给表添加别名,在表名后面空格加上别名，在查询时使用别名。
+SELECT a.name,b.name FROM emp a,dept b WHERE a.dept_id = b.id;
+
+```
+
+### 内连接
+
+查询A,B交集的部分数据。
+
+```sql
+# 语法
+SELECT 列名
+FROM 表1
+INNER JOIN 表2 ON 表1.列 = 表2.列;
+```
+
+显示内连接：
+
+```sql
+# 内连接查询emp和dept表中的name字段,emp.dept_id = dept.id的数据。
+SELECT a.name,b.name FROM emp a INNER JOIN dept b ON a.dept_id = b.id;
+```
+
+
+### 外连接
+
+左外连接：查询左表所有数据，包含右表交集的部分。
+
+右外连接：查询右表所有数据，包含左表交集的部分。
+
+### 自连接
+
+当前表与自身连接查询，自连接必须使用别名。
 
 ## 事务
