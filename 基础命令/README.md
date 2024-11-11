@@ -38,6 +38,9 @@
     - [内连接](#内连接)
     - [外连接](#外连接)
     - [自连接](#自连接)
+    - [联合查询（UNION UNION ALL）](#联合查询union-union-all)
+    - [子查询](#子查询)
+      - [标量子查询](#标量子查询)
   - [事务](#事务)
 
 ## SQL分类
@@ -645,7 +648,7 @@ SELECT a.name,b.name FROM emp a,dept b WHERE a.dept_id = b.id;
 
 ### 内连接
 
-查询A,B交集的部分数据。
+查询A,B交集的部分数据。可以省略`INNER`关键字。
 
 ```sql
 # 语法
@@ -661,15 +664,90 @@ INNER JOIN 表2 ON 表1.列 = 表2.列;
 SELECT a.name,b.name FROM emp a INNER JOIN dept b ON a.dept_id = b.id;
 ```
 
-
 ### 外连接
 
 左外连接：查询左表所有数据，包含右表交集的部分。
-
 右外连接：查询右表所有数据，包含左表交集的部分。
+
+```sql
+# 左连接
+SELECT 列名
+FROM 表1
+LEFT JOIN 表2 ON 表1.列 = 表2.列;
+# 右连接
+SELECT 列名
+FROM 表1
+RIGHT JOIN 表2 ON 表1.列 = 表2.列;
+```
+
+查询emp表中所有数据，包含dept表交集的部分数据。
+
+```sql
+select emp.name,dept.name from emp left join dept on emp.dept_id = dept.id
+```
 
 ### 自连接
 
-当前表与自身连接查询，自连接必须使用别名。
+当前表与自身连接查询，**自连接必须使用别名**。
+
+```sql
+# 语法
+SELECT 列名
+FROM 表 别名1
+JOIN 表 别名2 ON 别名1.列 = 别名2.列;
+```
+
+查询emp表中所有员工的姓名和上级领导的姓名。
+
+```sql
+SELECT a.name,b.name FROM emp a,emp b WHERE a.managerid = b.id;
+SELECT a.name,b.name FROM emp a JOIN emp b ON a.managerid = b.id;
+```
+
+### 联合查询（UNION UNION ALL）
+
+- UNION ：去除重复数据
+- UNION ALL ：包含重复数据
+
+> 查询多张表时的列数必须保持一致，字段类型也要保持一致
+
+```sql
+SELECT 列名
+FROM 表1
+LEFT JOIN 表2 ON 表1.列 = 表2.列
+UNION
+SELECT 列名
+FROM 表1
+RIGHT JOIN 表2 ON 表1.列 = 表2.列;
+```
+
+查询emp表中年龄小于20岁的员工和薪资小于4000的员工。`UNION` 去除重复数据
+
+```sql
+SELECT * FROM emp WHERE emp.age<20
+UNION 
+SELECT * FROM emp WHERE  emp.salary<4000;
+```
+
+### 子查询
+
+#### 标量子查询
+
+标量子查询返回单个值（一个列值），通常用于 `WHERE` 子句或 `SELECT` 子句中。
+
+```sql
+SELECT 列名
+FROM 表
+WHERE 列名 = (SELECT 单一列 FROM 表 WHERE 条件);
+```
+
+**示例：**
+
+查询article表中的作为王锤的文章标题和作者名。
+`(SELECT name FROM emp WHERE emp.name='王锤')`该条语句子返回一个用户名。
+
+```sql
+SELECT title 文章标题,author 作者名 FROM article WHERE article.author = (SELECT name FROM emp WHERE emp.name='王锤')
+```
 
 ## 事务
