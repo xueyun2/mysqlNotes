@@ -41,6 +41,9 @@
     - [联合查询（UNION UNION ALL）](#联合查询union-union-all)
     - [子查询](#子查询)
       - [标量子查询](#标量子查询)
+      - [列子查询](#列子查询)
+      - [行子查询](#行子查询)
+      - [表子查询](#表子查询)
   - [事务](#事务)
 
 ## SQL分类
@@ -748,6 +751,58 @@ WHERE 列名 = (SELECT 单一列 FROM 表 WHERE 条件);
 
 ```sql
 SELECT title 文章标题,author 作者名 FROM article WHERE article.author = (SELECT name FROM emp WHERE emp.name='王锤')
+```
+
+#### 列子查询
+
+列子查询返回一个列的值，通常用于 `IN`、`ALL` 或 `ANY` 操作符。
+
+- `in` ：列表中的任意一个值
+- `all` ：列表中的所有值
+- `any|some` ：列表中的任意一个值
+
+```sql
+SELECT 列名
+FROM 表
+WHERE 列名 IN (SELECT 单列 FROM 表 WHERE 条件);
+```
+
+查询emp表中部门为研发部或市场部的员工姓名和职位，子查询返回研发部，市场部的ID，和emp表中的dept_id进行比较。
+
+```sql
+
+SELECT name,job FROM emp WHERE dept_id IN (SELECT id FROM dept WHERE dept.name='研发部' OR dept.name='市场部');
+```
+
+#### 行子查询
+
+行子查询返回多列的数据，用于匹配多列条件，通常用于 `WHERE` 子句中，并结合 `IN` 操作符。
+
+```sql
+SELECT 列名
+FROM 表
+WHERE (列1, 列2) IN (SELECT 列1, 列2 FROM 表 WHERE 条件);
+```
+
+查询与王锤的薪资和经理ID相同的员工信息。
+
+```sql
+SELECT * FROM emp WHERE (salary, managerid) = (SELECT salary, managerid FROM emp WHERE name = '王锤');
+```
+
+#### 表子查询
+
+表子查询返回一个结果集（多行多列），通常在 `FROM` 子句中使用，将子查询的结果视为临时表。
+
+```sql
+SELECT 列名
+FROM (SELECT 列名 FROM 表 WHERE 条件) AS 子查询表别名;
+```
+
+查询薪资大于2000的员工姓名，薪资和经理ID，然后再查询经理ID为1的员工信息。
+
+```sql
+SELECT name,salary,managerid FROM (SELECT name,salary,managerid FROM emp WHERE salary > 2000) AS a WHERE a.managerid = 1;
 ```
 
 ## 事务
