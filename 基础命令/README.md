@@ -44,6 +44,8 @@
       - [列子查询](#列子查询)
       - [行子查询](#行子查询)
       - [表子查询](#表子查询)
+      - [相关子查询](#相关子查询)
+      - [EXISTS 子查询](#exists-子查询)
   - [事务](#事务)
 
 ## SQL分类
@@ -803,6 +805,42 @@ FROM (SELECT 列名 FROM 表 WHERE 条件) AS 子查询表别名;
 
 ```sql
 SELECT name,salary,managerid FROM (SELECT name,salary,managerid FROM emp WHERE salary > 2000) AS a WHERE a.managerid = 1;
+```
+
+#### 相关子查询
+
+相关子查询依赖于外部查询的值，每次评估子查询时都会引用外部查询中的数据。
+
+```sql
+SELECT 列名
+FROM 表 别名
+WHERE 列名 操作符 (SELECT 列名 FROM 表 WHERE 外部表.列 = 子查询表.列);
+```
+
+查询返回高于其部门平均工资的员工。子查询依赖于 e1 表的 managerid，因此每个外部行执行时，子查询也会相应更新
+
+```sql
+SELECT name, salary
+FROM emp e1
+WHERE salary > (SELECT AVG(salary) FROM emp e2 WHERE e1.managerid = e2.managerid);
+```
+
+#### EXISTS 子查询
+
+EXISTS 子查询用于检查子查询是否返回至少一行数据。通常用于检查数据是否存在。
+
+```sql
+SELECT 列名
+FROM 表
+WHERE EXISTS (SELECT 1 FROM 表 WHERE 条件);
+```
+
+此查询返回至少包含一名员工的部门。子查询 `SELECT 1 FROM emp WHERE dept_id = d.id` 检查是否存在至少一名员工的部门。
+
+```sql
+SELECT name
+FROM dept d
+WHERE EXISTS (SELECT 1 FROM emp e WHERE e.dept_id = d.id);
 ```
 
 ## 事务
