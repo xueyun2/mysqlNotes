@@ -48,6 +48,7 @@
       - [EXISTS 子查询](#exists-子查询)
   - [事务](#事务)
     - [事务的ACID属性](#事务的acid属性)
+    - [使用事务的步骤](#使用事务的步骤)
 
 ## SQL分类
 
@@ -852,3 +853,34 @@ WHERE EXISTS (SELECT 1 FROM emp e WHERE e.dept_id = d.id);
 - **一致性（Consistency）**：事务前后，数据库的状态应该保持一致，不会破坏数据的完整性。
 - **隔离性（Isolation）**：多个事务之间互不干扰，每个事务独立执行，修改数据不会被其他事务看到，直到该事务提交。
 - **持久性（Durability）**：一旦事务提交，数据的修改会永久保存，即使系统崩溃也不会丢失。
+
+### 使用事务的步骤
+
+在 MySQL 中，事务通常使用以下语句来控制：
+
+- `START TRANSACTION` 或 `BEGIN`：开始一个新的事务。
+- `COMMIT`：提交事务，保存所有修改。
+- `ROLLBACK`：回滚事务，撤销自 START TRANSACTION 以来的所有修改。
+- `SAVEPOINT`：创建一个保存点，可以部分回滚到此点。
+- `RELEASE SAVEPOINT`：删除一个保存点。
+- `ROLLBACK TO SAVEPOINT`：回滚到指定的保存点。
+
+查看当前事务是否为自动提交状态：
+
+```sql
+# 1 表示自动提交，0 表示手动提交。
+SELECT @@autocommit;
+# 设置为手动提交状态。
+SET @@autocommit = 0;
+```
+
+```sql
+# 开始事务
+START TRANSACTION;
+# 从ID为1的账户中减去100元
+UPDATE `user` SET `Balance` = Balance-100 WHERE id = 1;
+# 向ID为2的账户中加上100元
+UPDATE `user` SET `Balance` = Balance+100 WHERE id = 2;
+# 如果所有语句成功，提交事务
+COMMIT;
+```
