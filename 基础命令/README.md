@@ -49,6 +49,8 @@
   - [事务](#事务)
     - [事务的ACID属性](#事务的acid属性)
     - [使用事务的步骤](#使用事务的步骤)
+    - [并发事务问题](#并发事务问题)
+    - [事务隔离级别](#事务隔离级别)
 
 ## SQL分类
 
@@ -865,15 +867,6 @@ WHERE EXISTS (SELECT 1 FROM emp e WHERE e.dept_id = d.id);
 - `RELEASE SAVEPOINT`：删除一个保存点。
 - `ROLLBACK TO SAVEPOINT`：回滚到指定的保存点。
 
-查看当前事务是否为自动提交状态：
-
-```sql
-# 1 表示自动提交，0 表示手动提交。
-SELECT @@autocommit;
-# 设置为手动提交状态。
-SET @@autocommit = 0;
-```
-
 ```sql
 # 开始事务
 START TRANSACTION;
@@ -883,4 +876,43 @@ UPDATE `user` SET `Balance` = Balance-100 WHERE id = 1;
 UPDATE `user` SET `Balance` = Balance+100 WHERE id = 2;
 # 如果所有语句成功，提交事务
 COMMIT;
+```
+
+查看当前事务是否为自动提交状态：
+> 修改为手动提交时在执行完SQL语句后需要执行commit提交。
+
+```sql
+# 1 表示自动提交，0 表示手动提交。
+SELECT @@autocommit;
+# 设置为手动提交状态。
+SET @@autocommit = 0;
+```
+
+### 并发事务问题
+
+- **脏读：** 一个事务读取到另一个事务未提交的数据。
+- **不可重复读：** 一个事务先后读取同一条记录，但两次读取的数据不同，称之为不可重复读。
+- **幻读：** 一个事务按照条件查询数据时，没有对应的数据行，但是在插入数据时，又发现这行数据已经存在。
+
+### 事务隔离级别
+
+> 解决事务并发问题。
+
+| 隔离级别                | 脏读 | 不可重复读 | 幻读 |
+| ----------------------- | ---- | ---------- | ---- |
+| `Read uncommitted`      | √    | √          | √    |
+| `Read committed`        | ×    | √          | √    |
+| `Repeatable Read`(默认) | ×    | ×          | √    |
+| `Serializable`          | ×    | ×          | ×    |
+
+- 查看事务的隔离级别：`SELECT @@TRANSACTION_ISOLATION`;
+- 设置事务的隔离级别：`SET [SESSION|GLOBAL] TRANSACTION ISOLATION LEVEL [READ UNCOMMITTED|READ COMMITTED|REPEATABLE READ|SERIALIZABLE]`;
+
+> [SESSION|GLOBAL] 表示作用范围，SESSION 表示当前会话，GLOBAL 表示全局。
+
+```sql
+# 查看当前会话的隔离级别。
+SELECT @@TRANSACTION_ISOLATION;
+# 设置当前会话的隔离级别`READ UNCOMMITTED`。
+SET SESSION TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
 ```
