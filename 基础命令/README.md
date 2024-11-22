@@ -400,7 +400,7 @@ CREATE USER '用户名'@'主机名' IDENTIFIED BY '密码';
 # 修改用户
 # mysql_native_password 是mysql中的一个加密方式
 
-CREATE USER '用户名'@'主机名' IDENTIFIED WITH mysql_native_password BY '新密码';
+ALTER USER '用户名'@'主机名' IDENTIFIED WITH mysql_native_password BY '新密码';
 
 # 删除用户
 
