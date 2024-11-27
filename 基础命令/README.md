@@ -51,6 +51,7 @@
     - [使用事务的步骤](#使用事务的步骤)
     - [并发事务问题](#并发事务问题)
     - [事务隔离级别](#事务隔离级别)
+  - [字符编码](#字符编码)
 
 ## SQL分类
 
@@ -915,4 +916,21 @@ SET @@autocommit = 0;
 SELECT @@TRANSACTION_ISOLATION;
 # 设置当前会话的隔离级别`READ UNCOMMITTED`。
 SET SESSION TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
+```
+
+## 字符编码
+
+```sql
+# 修改数据库字符编码
+ALTER DATABASE blog CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+# 修改单个表字符编码
+ALTER TABLE articles CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+# 查询所有表字符集编码
+SELECT 
+    TABLE_NAME, 
+    TABLE_COLLATION 
+FROM 
+    INFORMATION_SCHEMA.TABLES 
+WHERE 
+    TABLE_SCHEMA = 'blog';
 ```
